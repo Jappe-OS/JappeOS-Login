@@ -15,7 +15,6 @@
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -26,15 +25,17 @@ import 'package:jappeos_desktop_ui/widgets/blur_container.dart';
 import 'package:jappeos_desktop_ui/widgets/loading_indicator.dart';
 import 'package:jappeos_desktop_ui/widgets/text.dart';
 import 'package:jappeos_desktop_ui/widgets/text_field.dart';
-import 'package:jappeos_messaging/jappeos_messaging.dart';
 import 'package:provider/provider.dart';
 import 'package:shade_theming/shade_theming.dart';
+import 'package:jappeos_core_lib/jappeos_core_lib.dart';
 
 void main(List<String> arguments) {
   List<String?> login = [null, null];
 
+  //JappeOS.INIT();
+
   if (arguments.isNotEmpty) login = arguments[0].split(r"$¤&&£$");
-  if (login[0] != null && login[1] != null) _Base.login(login[0]!, login[1]!);
+  if (login[0] != null && login[1] != null) JappeOS.login(login[0] ?? "", login[1] ?? "");
 
   ShadeTheme.setThemeProperties(
       DarkThemeProperties(ThemeProperties(
@@ -56,10 +57,12 @@ void main(List<String> arguments) {
           const Color(0xFF000000).withOpacity(0.6),
           const Color(0xFFFFFFFF).withOpacity(0.9))));
 
-  CoreMessageMan.init();
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider<ShadeThemeProvider>(create: (_) => ShadeThemeProvider())],
+      providers: [
+        ChangeNotifierProvider<ShadeThemeProvider>(
+            create: (_) => ShadeThemeProvider())
+      ],
       child: const AppMain(),
     ),
   );
@@ -157,7 +160,8 @@ class _LoginUIState extends State<LoginUI> with SingleTickerProviderStateMixin {
   }
 
   void _startUserLoginTimer() {
-    _userLoginTimer = Timer.periodic(const Duration(seconds: 25), (Timer timer) {
+    _userLoginTimer =
+        Timer.periodic(const Duration(seconds: 25), (Timer timer) {
       if (userLoginLoading) return;
       setState(() {
         _mainScreen();
@@ -297,7 +301,8 @@ class _LoginUIState extends State<LoginUI> with SingleTickerProviderStateMixin {
               scale: 1 - 1 / 8,
               child: Center(
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: animProgress * 10, sigmaY: animProgress * 10),
+                  filter: ImageFilter.blur(
+                      sigmaX: animProgress * 10, sigmaY: animProgress * 10),
                   child: DeuiBlurContainer(
                     width: 300,
                     bordered: true,
@@ -318,13 +323,5 @@ class _LoginUIState extends State<LoginUI> with SingleTickerProviderStateMixin {
         ),
       );
     }
-  }
-}
-
-/// Basic functions needed for the login screen to actually work.
-class _Base {
-  /// Login to the linux system using JappeOS Messaging.
-  static void login(String arg0, String arg1) async {
-    CoreMessageMan.send("${Platform.executable}/core/pipes/", Message(JMSG_COREPRCSS_MSG_LOGIN, {"u:": arg0, "p:": arg1}));
   }
 }

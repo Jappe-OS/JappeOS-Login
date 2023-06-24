@@ -25,9 +25,9 @@ dependencies:
       url: https://github.com/Jappe-OS/ShadeTheming.git
       ref: master
 
-  jappeos_messaging:
+  jappeos_core_lib:
     git:
-      url: https://github.com/Jappe-OS/JappeOS-Messaging.git
+      url: https://github.com/Jappe-OS/JappeOS-CoreLib.git
       ref: master
 
 dev_dependencies:
