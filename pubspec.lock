@@ -121,7 +121,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: f534ef725f56a947ee69227b40bdd9d8e8d9e5d4
+      resolved-ref: "2219b260ac843a46cf754190a49a7b4063ee38f5"
       url: "https://github.com/Jappe-OS/JappeOS-DesktopUI.git"
     source: git
     version: "1.0.0+1"
